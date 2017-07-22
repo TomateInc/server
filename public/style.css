@@ -1,0 +1,15 @@
+.initial {
+	width:25%;
+	margin: auto;
+}
+
+.initial h1 {
+	color:#DF2C11;
+	text-align: center;
+	font-family: "Verdana", sans-serif;
+	font-size: 3vw;
+}
+.fill {
+	max-width:100%;
+	max-height:100%;
+}
