@@ -1,28 +1,29 @@
 {
-  "name": "server",
+  "name": "tomate-server",
   "version": "1.0.0",
   "description": "Tomate server",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/TomateInc/server.git"
   },
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon index.js",
     "test": "echo \"No test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^3.5.0",
-    "body-parser": "^1.17.2",
-    "config": "^1.26.1",
-    "cors": "^2.8.3",
-    "express": "^4.15.3",
-    "mongoose": "^4.10.1",
-    "morgan": "^1.8.2",
-    "restler-promise": "0.0.6"
+    "bluebird": "^3.5.4",
+    "body-parser": "^1.18.3",
+    "config": "^3.0.1",
+    "connect-history-api-fallback": "^1.6.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "express-async-errors": "^3.1.1",
+    "mongodb": "^3.1.13",
+    "morgan": "^1.9.1"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.18.9"
   }
 }
