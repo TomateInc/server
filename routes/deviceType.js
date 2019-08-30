@@ -1,8 +1,19 @@
 const router = require('express').Router();
-const dCont = require('../lib/deviceController');
+
 
 router.get('/', async function(req, res, next) {
-	res.send(dCont.devices);
+	let data = [
+		{
+			_id: 1,
+			type: 'light'
+		},
+		{
+			_id: 2,
+			type: 'mqtt light'
+		}
+	];
+
+	res.send(shedule);
 });
 
 module.exports = router;
