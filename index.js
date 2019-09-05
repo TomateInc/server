@@ -11,4 +11,5 @@ mongo.connect().then(() => {
 
 	// setup web component (api and web client)
 	require('./lib/web');
+	require('./lib/socket');
 });
