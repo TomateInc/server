@@ -1,35 +1,28 @@
-var config = {
+'use strict';
+
+let config = {
 	// app port
 	port: 1234,
-	dbUrl: 'mongodb://localhost:27017',
-	dbName: 'tomate',
-
-	deviceTypes: [
-		{
-			_id: 1,
-			type: 'light'
-		},
-		{
-			_id: 2,
-			type: 'light/mqtt'
-		}
-	],
+	_mongo: {
+		url: 'mongodb://localhost:27017',
+		name: 'tomate',
+	},
+	_mqtt: {
+		host: '{MQTT-SERVER}',
+		port: 1883, // Usually 1883
+		username: '{MQTT-USERNAME}',
+		password: '{MQTT-PASSWORD}',
+	},
 
 	devices: [
 		{
-			_id: 1,
 			name: 'Light kitchen',
 			type: 'light/mqtt',
-			config: {
-				state_topic: "home/rgb1",
-				command_topic: "home/rgb1/set",
-				brightness: true,
-				rgb: true,
-			},
-			state: {
-				on: true,
-				color: 1,
-			},
+
+			state_topic: "home/rgb1",
+			command_topic: "home/rgb1/set",
+			brightness: true,
+			rgb: true,
 		}
 	],
 };

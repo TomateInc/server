@@ -1,36 +1,55 @@
+'use strict';
+
 const MQTT = require('async-mqtt');
-const io = require('../../lib/socket');
 
-module.exports = {
-	create: async function (config) {
-		//subscribe to mqtt messages to update the state
-		//todo implement config
-		// respond to mqtt state changes
-		const client = await MQTT.connectAsync('tcp://somehost.com:1883')
+module.exports = async(app, config) => {
+	let mqtt = app.modules.mqtt;
 
-		await client.subscribe('home/rgb1');
+	if (!mqtt) {
+		throw 'mqtt module is required for light/mqtt';
+	}
 
-		client.on('message', function (topic, message) {
-			// message is Buffer
+	//subscribe to mqtt messages to update the state
+	await mqtt.subscribe(config.state_topic);
+
+	// respond to mqtt state changes
+	client.on('message', function (topic, message) {
+		// message is Buffer
+		if (topic === config.state_topic) {
 			console.log(message.toString());
-		});
+			//TODO update device state
+		}
+	});
 
-		return {
-			config,
-			state: {}, // fill this object with the latest state from the database on creation
+	return {
+		config,
+		state: {
+			//TODO fill this object with the latest state from the database on creation
+		},
+		actions: {
+			set: async function(state) {
+				// Sample payload
+				//{
+				//	"brightness": 120,
+				//	"color": {
+				//		"r": 255,
+				//		"g": 255,
+				//		"b": 255
+				//	},
+				//	"effect": "rainbow cycle",
+				//	"state": "ON"
+				//}
 
-			set: function(state) {
 				//set the current state
-				//todo send command to the light
-				//await client.publish("wow/so/cool", "It works!");
-				io.emit('deviceChange', state);
+				//TODO send command to the light
+				await mqtt.publish(config.command_topic, "It works!");
 			},
 
-			toggle: function() {
+			toggle: async function() {
 				//toggle action
-				//todo send command to the light
-				//await client.publish("wow/so/cool", "It works!");
+				//TODO send command to the light
+				await mqtt.publish(config.command_topic, "It works!");
 			},
-		};
-	},
+		},
+	};
 };
