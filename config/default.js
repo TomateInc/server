@@ -16,6 +16,7 @@ let config = {
 
 	devices: [
 		{
+			id: 'light.kitchen',
 			name: 'Light kitchen',
 			type: 'light/mqtt',
 
@@ -23,6 +24,9 @@ let config = {
 			command_topic: "home/rgb1/set",
 			brightness: true,
 			rgb: true,
+
+			payload_on: 'ON',
+			payload_off: 'OFF',
 		}
 	],
 };

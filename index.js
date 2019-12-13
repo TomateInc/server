@@ -21,7 +21,7 @@ async function startup() {
 	}
 
 	// initialize devices
-	await app.modules['deviceController'].initialize(app);
+	await app.modules.deviceController.initialize(app);
 	console.log('server started');
 };
 

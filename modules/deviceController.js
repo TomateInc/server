@@ -13,16 +13,19 @@ module.exports = async (config) => {
 				try {
 					let devType = require(`../devices/${d.type}`);
 					let newDev = await devType(app, d);
-			
-					newDev._id = d._id;
+
+					newDev.id = d.id;
 					newDev.name = d.name;
 					newDev.type = d.type;
-			
+
 					devices.push(newDev);
 				} catch (e) {
-					console.error('Failed to load device: ' + e);
+					console.error(`Failed to load device (${d.id}): ${e}`);
 				}
 			}
+		},
+		stateChange(devId, dev) {
+			//TODO add event emitter so we can tell other components about this
 		},
 		devices,
 	};
