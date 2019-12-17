@@ -5,6 +5,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# ignore all config files except the default
+config/
+!config/default.js
+
 # Runtime data
 pids
 *.pid
