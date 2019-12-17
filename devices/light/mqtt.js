@@ -13,7 +13,7 @@ module.exports = async(app, config) => {
 	await mqtt.subscribe(config.state_topic);
 
 	// respond to mqtt state changes
-	client.on('message', function (topic, message) {
+	mqtt.on('message', function (topic, message) {
 		// message is Buffer
 		if (topic === config.state_topic) {
 			console.log(message.toString());
