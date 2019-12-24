@@ -19,4 +19,4 @@ module.exports = async (config) => {
 	await gate.client.publish(config.topicSet, config.payloadOpen);*/
 
 	return client;
-}
+};

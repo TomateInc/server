@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const dCont = require('../lib/deviceController');
+const app = require('../index');
 
 router.get('/', async function(req, res, next) {
-	res.send(dCont.devices);
+	res.send(app.modules.deviceController.devices);
 });
 
 module.exports = router;
