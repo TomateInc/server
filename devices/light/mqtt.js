@@ -19,7 +19,7 @@ module.exports = async(app, config) => {
 			b: 255
 		},
 		effect: null,
-		state: false,
+		on: false,
 	};
 
 	let device = {
@@ -32,11 +32,10 @@ module.exports = async(app, config) => {
 	mqtt.on('message', function (topic, message) {
 		// message is Buffer
 		if (topic === config.state_topic) {
-			console.log(message.toString());
 			let ns = JSON.parse(message);
 			
 			// update device state
-			state.state = (ns.state === config.payload_on);
+			state.on = (ns.state === config.payload_on);
 			state.effect = ns.effect;
 
 			if (ns.brightness !== undefined) {
@@ -49,7 +48,7 @@ module.exports = async(app, config) => {
 				state.color.b = ns.color.b;
 			}
 
-			//TODO notify device state change
+			// notify device state change
 			ctrl.stateChange(config.id, device);
 		}
 	});
@@ -66,11 +65,11 @@ module.exports = async(app, config) => {
 		//	"effect": "rainbow cycle",
 		//	"state": "ON"
 		//}
-		let ss = {};
+		let ns = {};
 
-		ss.state = (s.state ? config.payload_on : config.payload_off);
+		ns.state = (s.on ? config.payload_on : config.payload_off);
 		if (s.effect !== undefined) {
-			ss.effect = s.effect;
+			ns.effect = s.effect;
 		}
 
 		if (s.brightness !== undefined) {
@@ -87,7 +86,7 @@ module.exports = async(app, config) => {
 	device.actions = {
 		set,
 		toggle: async function() {
-			await set({ state: !state.state });
+			await set({ on: !state.on });
 		},
 	};
 
