@@ -29,7 +29,6 @@ let config = {
 			payload_on: 'ON',
 			payload_off: 'OFF',
 		},
-		
 		{
 			id: 'light.living',
 			name: 'Light living',
@@ -42,7 +41,7 @@ let config = {
 
 			payload_on: 'ON',
 			payload_off: 'OFF',
-		}
+		},
 	],
 };
 
