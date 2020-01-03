@@ -27,9 +27,9 @@ module.exports = async (config) => {
 
 	app.use('/api', require('../routes')); // api endpoints
 
-	app.use(express.static('../public')); // static resources
+	app.use(express.static('public')); // static resources
 
-	const staticFileMiddleware = express.static('../client'); // client resources
+	const staticFileMiddleware = express.static('client'); // client resources
 	app.use(staticFileMiddleware);
 	app.use(history());
 	app.use(staticFileMiddleware);

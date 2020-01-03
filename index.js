@@ -25,10 +25,6 @@ async function startup() {
 	console.log('server started');
 };
 
-// setup web component (api and web client)
-//	require('./lib/web');
-//	require('./lib/socket');
-
 startup();
 
 module.exports = app;
