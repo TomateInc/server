@@ -18,6 +18,7 @@
     "body-parser": "^1.18.3",
     "config": "^3.2.4",
     "connect-history-api-fallback": "^1.6.0",
+    "connect-sse": "^1.2.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-async-errors": "^3.1.1",
