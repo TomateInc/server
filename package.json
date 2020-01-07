@@ -7,7 +7,8 @@
     "url": "https://github.com/TomateInc/server.git"
   },
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
+    "dev": "nodemon --exec \"npm run lint && node index.js\"",
     "test": "echo \"No test specified\" && exit 1",
     "lint": "npx eslint **/*.js --ignore-path .gitignore",
     "fix": "npx eslint **/*.js --ignore-path .gitignore --fix"
