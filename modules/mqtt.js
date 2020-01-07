@@ -2,7 +2,7 @@
 
 const MQTT = require('async-mqtt');
 
-module.exports = async (config) => {
+module.exports = async(config) => {
 	if (!config.mqtt) {
 		throw 'No "mqtt" config supplied';
 	}

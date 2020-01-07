@@ -2,7 +2,7 @@
 
 const eventEmitter = require('events').EventEmitter;
 
-module.exports = async (config) => {
+module.exports = async(config) => {
 	console.log('creating device controller');
 	const devconfigs = config.get('devices'); // todo get devices from other place such as a dedicated config file or db
 	

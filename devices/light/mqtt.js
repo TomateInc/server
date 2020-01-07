@@ -16,7 +16,7 @@ module.exports = async(app, config) => {
 		color: {
 			r: 255,
 			g: 255,
-			b: 255
+			b: 255,
 		},
 		effect: null,
 		on: false,
@@ -29,7 +29,7 @@ module.exports = async(app, config) => {
 	};
 
 	// respond to mqtt state changes
-	mqtt.on('message', function (topic, message) {
+	mqtt.on('message', function(topic, message) {
 		// message is Buffer
 		if (topic === config.state_topic) {
 			let ns = JSON.parse(message);

@@ -2,7 +2,7 @@
 
 const MongoClient = require('mongodb').MongoClient;
 
-module.exports = async (config) => {
+module.exports = async(config) => {
 	if (!config.mongo) {
 		throw 'No "mongo" config supplied';
 	}

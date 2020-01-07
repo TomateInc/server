@@ -7,7 +7,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const history = require('connect-history-api-fallback');
 
-module.exports = async (config) => {
+module.exports = async(config) => {
 	if (!config.web) {
 		throw 'No "web" config supplied';
 	}

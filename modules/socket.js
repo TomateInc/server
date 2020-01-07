@@ -1,4 +1,5 @@
-module.exports = async (config) => {
+/* eslint-disable no-unreachable */
+module.exports = async(config) => {
 	throw 'NOT IMPLEMENTED';
 
 	if (!config.socket) {
