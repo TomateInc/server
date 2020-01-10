@@ -10,8 +10,8 @@
     "start": "node index.js",
     "dev": "nodemon --exec \"npm run lint && node index.js\"",
     "test": "echo \"No test specified\" && exit 1",
-    "lint": "npx eslint **/*.js --ignore-path .gitignore",
-    "fix": "npx eslint **/*.js --ignore-path .gitignore --fix"
+    "lint": "npx eslint . --ignore-path .gitignore",
+    "fix": "npx eslint . --ignore-path .gitignore --fix"
   },
   "author": "",
   "license": "ISC",
