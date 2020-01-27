@@ -22,7 +22,7 @@ module.exports = async(app, config) => {
 
 	let defaultConfig = {
 		brightness: false,
-		rgb: true,
+		rgb: false,
 
 		payload_on: 'ON',
 		payload_off: 'OFF',
@@ -54,7 +54,7 @@ module.exports = async(app, config) => {
 		// message is Buffer
 		if (topic === config.state_topic) {
 			let ns = JSON.parse(message);
-			
+
 			// update device state
 			state.on = (ns.state === config.payload_on);
 			state.effect = ns.effect;
