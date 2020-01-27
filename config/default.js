@@ -23,11 +23,6 @@ let config = {
 
 			state_topic: "home/rgb1",
 			command_topic: "home/rgb1/set",
-			brightness: true,
-			rgb: true,
-
-			payload_on: 'ON',
-			payload_off: 'OFF',
 		},
 		{
 			id: 'light.living',
@@ -36,11 +31,6 @@ let config = {
 
 			state_topic: "home/rgb1",
 			command_topic: "home/rgb1/set",
-			brightness: true,
-			rgb: true,
-
-			payload_on: 'ON',
-			payload_off: 'OFF',
 		},
 	],
 };

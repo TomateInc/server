@@ -4,12 +4,21 @@ const eventEmitter = require('events').EventEmitter;
 
 module.exports = async(config) => {
 	console.log('creating device controller');
-	const devconfigs = config.get('devices'); // todo get devices from other place such as a dedicated config file or db
+	const devconfigs = config.get('devices'); // TODO get devices from other place such as a dedicated config file or db
 	
 	let controller = Object.create(new eventEmitter());
 	let devices = [];
 
 	async function addDevice(app, conf) {
+		// check if the basic required values are filled in
+		let basicConfig = [ 'id', 'name', 'type' ];
+		for (let c of basicConfig) {
+			// we check if the given property is a string because they should all be strings
+			if(typeof conf[c] !== 'string') {
+				throw `No config value provided for '${c}'`;
+			}
+		}
+
 		let devType = require(`../devices/${conf.type}`);
 		let newDev = await devType(app, conf);
 

@@ -8,6 +8,27 @@ module.exports = async(app, config) => {
 		throw 'mqtt module is required for light/mqtt';
 	}
 
+	let requiredConfig = [
+		'state_topic', //ex. home/rgb1
+		'command_topic', // ex. home/rgb1/set
+	];
+
+	for (let c of requiredConfig) {
+		// we check if the given property is a string because they should all be strings
+		if(typeof config[c] !== 'string') {
+			throw `No config value provided for '${c}'`;
+		}
+	}
+
+	let defaultConfig = {
+		brightness: false,
+		rgb: true,
+
+		payload_on: 'ON',
+		payload_off: 'OFF',
+	};
+	config = Object.assign(defaultConfig, config);
+
 	//subscribe to mqtt messages to update the state
 	await mqtt.subscribe(config.state_topic);
 
