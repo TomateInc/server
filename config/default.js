@@ -32,6 +32,24 @@ let config = {
 			state_topic: "home/rgb1",
 			command_topic: "home/rgb1/set",
 		},
+		{
+			id: 'sensor.living.temperature',
+			name: 'Living temperature',
+			type: 'sensor/mqtt',
+
+			unit: '°c',
+			value_property: 'temperature',
+			state_topic: "home/living/sensor",
+		},
+		{
+			id: 'sensor.living.humidity',
+			name: 'Living humidity',
+			type: 'sensor/mqtt',
+
+			unit: '%',
+			value_property: 'humidity',
+			state_topic: "home/living/sensor",
+		},
 	],
 };
 
