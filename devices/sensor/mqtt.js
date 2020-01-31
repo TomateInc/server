@@ -9,7 +9,7 @@ module.exports = async(app, config) => {
 	}
 
 	let requiredConfig = [
-		'state_topic', //ex. home/temperature
+		'stateTopic', //ex. home/temperature
 	];
 
 	for (let c of requiredConfig) {
@@ -21,28 +21,38 @@ module.exports = async(app, config) => {
 
 	let defaultConfig = {
 		unit: '',
-		value_property: '',
+		resetDelay: 0,
+		valueProperty: '',
 	};
 	config = Object.assign(defaultConfig, config);
 
-	config.accessor = config.value_property.split('.');
+	config.accessor = config.valueProperty.split('.');
 
 	//subscribe to mqtt messages to update the state
-	await mqtt.subscribe(config.state_topic);
+	await mqtt.subscribe(config.stateTopic);
 
 	let state = {};
+
+	function set(val) {
+		state.value = val;
+
+		// notify device state change
+		ctrl.stateChange(config.id, device);
+	}
 
 	let device = {
 		config,
 		state,
-		actions: {},
+		actions: { set },
 	};
+
+	let timeout = undefined;
 
 	// respond to mqtt state changes
 	mqtt.on('message', function(topic, message) {
 		// message is Buffer
-		if (topic === config.state_topic) {
-			if (!config.value_property) {
+		if (topic === config.stateTopic) {
+			if (!config.valueProperty) {
 				state.value = message;
 			} else {
 				state.value = JSON.parse(message);
@@ -52,8 +62,16 @@ module.exports = async(app, config) => {
 				}
 			}
 
-			// notify device state change
-			ctrl.stateChange(config.id, device);
+			set(state.value);
+
+			if (timeout) {
+				clearTimeout(timeout);
+				timeout = undefined;
+			}
+
+			if(+config.resetDelay) {
+				timeout = setTimeout(() => set(undefined), +config.resetDelay);
+			}
 		}
 	});
 

@@ -21,16 +21,16 @@ let config = {
 			name: 'Light kitchen',
 			type: 'light/mqtt',
 
-			state_topic: "home/rgb1",
-			command_topic: "home/rgb1/set",
+			stateTopic: "home/rgb1",
+			commandTopic: "home/rgb1/set",
 		},
 		{
 			id: 'light.living',
 			name: 'Light living',
 			type: 'light/mqtt',
 
-			state_topic: "home/rgb1",
-			command_topic: "home/rgb1/set",
+			stateTopic: "home/rgb1",
+			commandTopic: "home/rgb1/set",
 		},
 		{
 			id: 'sensor.living.temperature',
@@ -38,8 +38,8 @@ let config = {
 			type: 'sensor/mqtt',
 
 			unit: '°c',
-			value_property: 'temperature',
-			state_topic: "home/living/sensor",
+			valueProperty: 'temperature',
+			stateTopic: "home/living/sensor",
 		},
 		{
 			id: 'sensor.living.humidity',
@@ -47,8 +47,8 @@ let config = {
 			type: 'sensor/mqtt',
 
 			unit: '%',
-			value_property: 'humidity',
-			state_topic: "home/living/sensor",
+			valueProperty: 'humidity',
+			stateTopic: "home/living/sensor",
 		},
 	],
 };

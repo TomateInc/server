@@ -9,8 +9,8 @@ module.exports = async(app, config) => {
 	}
 
 	let requiredConfig = [
-		'state_topic', //ex. home/rgb1
-		'command_topic', // ex. home/rgb1/set
+		'stateTopic', //ex. home/rgb1
+		'commandTopic', // ex. home/rgb1/set
 	];
 
 	for (let c of requiredConfig) {
@@ -24,13 +24,13 @@ module.exports = async(app, config) => {
 		brightness: false,
 		rgb: false,
 
-		payload_on: 'ON',
-		payload_off: 'OFF',
+		payloadOn: 'ON',
+		payloadOff: 'OFF',
 	};
 	config = Object.assign(defaultConfig, config);
 
 	//subscribe to mqtt messages to update the state
-	await mqtt.subscribe(config.state_topic);
+	await mqtt.subscribe(config.stateTopic);
 
 	let state = {
 		brightness: 255,
@@ -52,11 +52,11 @@ module.exports = async(app, config) => {
 	// respond to mqtt state changes
 	mqtt.on('message', function(topic, message) {
 		// message is Buffer
-		if (topic === config.state_topic) {
+		if (topic === config.stateTopic) {
 			let ns = JSON.parse(message);
 
 			// update device state
-			state.on = (ns.state === config.payload_on);
+			state.on = (ns.state === config.payloadOn);
 			state.effect = ns.effect;
 
 			if (ns.brightness !== undefined) {
@@ -88,7 +88,7 @@ module.exports = async(app, config) => {
 		//}
 		let ns = {};
 
-		ns.state = (s.on ? config.payload_on : config.payload_off);
+		ns.state = (s.on ? config.payloadOn : config.payloadOff);
 		if (s.effect !== undefined) {
 			ns.effect = s.effect;
 		}
@@ -101,7 +101,7 @@ module.exports = async(app, config) => {
 			ns.color = s.color;
 		}
 
-		await mqtt.publish(config.command_topic, JSON.stringify(ns));
+		await mqtt.publish(config.commandTopic, JSON.stringify(ns));
 	}
 
 	device.actions = {
