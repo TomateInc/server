@@ -1,5 +1,7 @@
 'use strict';
 
+const eventEmitter = require('events').EventEmitter;
+
 module.exports = async(app, config) => {
 	let mqtt = app.modules.mqtt;
 	let ctrl = app.modules.deviceController;
@@ -43,11 +45,12 @@ module.exports = async(app, config) => {
 		on: false,
 	};
 
-	let device = {
+	let device = Object.create(new eventEmitter());
+	device = Object.assign(device, {
 		config,
 		state,
 		actions: {},
-	};
+	});
 
 	// respond to mqtt state changes
 	mqtt.on('message', function(topic, message) {
@@ -56,7 +59,11 @@ module.exports = async(app, config) => {
 			let ns = JSON.parse(message);
 
 			// update device state
-			state.on = (ns.state === config.payloadOn);
+			let newOn = (ns.state === config.payloadOn);
+			if (state.on != newOn) {
+				device.emit(newOn ? 'on' : 'off', this);
+			}
+			state.on = newOn;
 			state.effect = ns.effect;
 
 			if (ns.brightness !== undefined) {
@@ -106,7 +113,13 @@ module.exports = async(app, config) => {
 
 	device.actions = {
 		set,
-		toggle: async function() {
+		async on() {
+			await set({ on: true });
+		},
+		async off() {
+			await set({ on: false });
+		},
+		async toggle() {
 			await set({ on: !state.on });
 		},
 	};

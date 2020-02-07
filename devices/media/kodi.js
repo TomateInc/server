@@ -1,5 +1,6 @@
 'use strict';
 const WebSocket = require('ws');
+const eventEmitter = require('events').EventEmitter;
 
 module.exports = async(app, config) => {
 	let ctrl = app.modules.deviceController;
@@ -75,16 +76,30 @@ module.exports = async(app, config) => {
 			}
 		}
 
-		handleNotification(data.method, data.params.data);
+		// the method is only set if a notification is received
+		if (data.method) {
+			handleNotification(data.method, data.params.data);
+		}
 	});
+
+	function handleSpeedChange(speed, event) {
+		device.emit(event, this);
+		state.speed = speed;
+		ctrl.stateChange(config.id, device);
+
+	}
 
 	function handleNotification(method, data) {
 		switch (method) {
-			case 'Player.OnPause':
 			case 'Player.OnPlay':
+			case 'Player.OnResume':
+				handleSpeedChange(data.player.speed, 'play');
+				break;
+			case 'Player.OnPause':
+				handleSpeedChange(data.player.speed, 'pause');
+				break;
 			case 'Player.OnAVStart':
 			case 'Player.OnAVChange':
-			case 'Player.OnResume':
 			case 'Player.OnSpeedChanged':
 			case 'Player.OnSeek':
 				state.speed = data.player.speed;
@@ -92,18 +107,19 @@ module.exports = async(app, config) => {
 				break;
 
 			case 'Player.OnStop':
+				device.emit('stop', this);
 				state.currentPlayerId = undefined;
 				state.speed = 0;
 				ctrl.stateChange(config.id, device);
 				break;
-				
+
 			case 'Player.OnQuit':
 			case 'Player.OnRestart':
 			case 'Player.OnSleep':
 				if (state.connected) {
 					ws.close();
 				}
-				
+
 				ws = undefined;
 				state.connected = false;
 				state.currentPlayerId = undefined;
@@ -112,12 +128,12 @@ module.exports = async(app, config) => {
 				break;
 		}
 	}
-
-	let device = {
+	let device = Object.create(new eventEmitter());
+	device = Object.assign(device, {
 		config,
 		state,
 		actions: {},
-	};
+	});
 
 	return device;
 };
