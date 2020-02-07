@@ -1,30 +1,14 @@
 'use strict';
 
-console.log('warming up server');
-let app = {
-	modules: {},
-};
+const app = require('./app');
+const ON_DEATH = require('death');
 
-async function startup() {
-	const config = require('config');
-	let modules = require('./modules');
+app.startup();
 
-	for (let mn in modules) {
-		console.log('loading module: ' + mn);
-		try {
-			app.modules[mn] = await modules[mn](config);
-			console.log('module loaded: ' + mn);
-		} catch (e) {
-			console.log(e);
-			console.log('module not set up: ' + mn);
-		}
-	}
-
-	// initialize devices
-	await app.modules.deviceController.initialize(app);
-	console.log('server started');
-}
-
-startup();
+ON_DEATH(() => {
+	app.shutdown().finally(() => {
+		process.exit(0);
+	});
+});
 
 module.exports = app;

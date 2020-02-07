@@ -2,7 +2,7 @@
 const WebSocket = require('ws');
 
 module.exports = async(app, config) => {
-	// let ctrl = app.modules.deviceController;
+	let ctrl = app.modules.deviceController;
 
 	let requiredConfig = [
 		'host', //ex. 127.0.0.1
@@ -27,7 +27,8 @@ module.exports = async(app, config) => {
 	};
 
 	//create connection
-	const ws = new WebSocket(`ws://${config.host}:${config.port}/jsonrpc`);
+	// TODO implement socket reconnection
+	let ws = new WebSocket(`ws://${config.host}:${config.port}/jsonrpc`);
 
 	function sendCommand(method, params, id) {
 		if (!state.connected) {
@@ -70,14 +71,47 @@ module.exports = async(app, config) => {
 			if (data.result[0]) {
 				// if the result contains at least one item then take its player id as the current player
 				state.currentPlayerId = data.result[0].playerid;
-				sendCommand('Player.GetProperties', { playerid: state.currentPlayerId, properties: ['speed', 'time', 'totaltime' ] }, 1);
+				sendCommand('Player.GetProperties', { playerid: state.currentPlayerId, properties: ['speed', 'time', 'totaltime' ] }, 1); //TODO handle player properties
 			}
 		}
 
-		if (data.method);
+		handleNotification(data.method, data.params.data);
 	});
 
+	function handleNotification(method, data) {
+		switch (method) {
+			case 'Player.OnPause':
+			case 'Player.OnPlay':
+			case 'Player.OnAVStart':
+			case 'Player.OnAVChange':
+			case 'Player.OnResume':
+			case 'Player.OnSpeedChanged':
+			case 'Player.OnSeek':
+				state.speed = data.player.speed;
+				ctrl.stateChange(config.id, device);
+				break;
 
+			case 'Player.OnStop':
+				state.currentPlayerId = undefined;
+				state.speed = 0;
+				ctrl.stateChange(config.id, device);
+				break;
+				
+			case 'Player.OnQuit':
+			case 'Player.OnRestart':
+			case 'Player.OnSleep':
+				if (state.connected) {
+					ws.close();
+				}
+				
+				ws = undefined;
+				state.connected = false;
+				state.currentPlayerId = undefined;
+				state.speed = 0;
+				ctrl.stateChange(config.id, device);
+				break;
+		}
+	}
 
 	let device = {
 		config,

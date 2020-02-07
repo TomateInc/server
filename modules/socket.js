@@ -1,9 +1,9 @@
 /* eslint-disable no-unreachable */
-module.exports = async(config) => {
-	throw 'NOT IMPLEMENTED';
+module.exports = async(app, config) => {
+	throw 'socket: NOT IMPLEMENTED';
 
 	if (!config.socket) {
-		throw 'No "socket" config supplied';
+		throw 'socket: No config supplied';
 	}
 
 	// TODO get web module dependencie

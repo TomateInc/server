@@ -16,7 +16,7 @@ router.get('/', async function(req, res, next) {
 });
 
 router.post('/:id([\\w\\.]+)/action/:action', async function(req, res, next) {
-	const dev = app.modules.deviceController.devices.find(d => d.id === req.params.id);
+	const dev = app.modules.deviceController.getDevice(req.params.id);
 	if (!dev) {
 		return res.status(404).json({ msg: `Device with id '${req.params.id}' not found.` });
 	}

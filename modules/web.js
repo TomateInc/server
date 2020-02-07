@@ -7,41 +7,41 @@ const cors = require('cors');
 const morgan = require('morgan');
 const history = require('connect-history-api-fallback');
 
-module.exports = async(config) => {
+module.exports = async(app, config) => {
 	if (!config.web) {
-		throw 'No "web" config supplied';
+		throw 'web: No config supplied';
 	}
 
-	const app = express();
-	const http = require('http').createServer(app);
+	const srv = express();
+	const http = require('http').createServer(srv);
 
-	console.log('setting up express service');
+	console.log('web: setting up express service');
 
 	// Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 	// see https://expressjs.com/en/guide/behind-proxies.html
-	//app.set('trust proxy', 1);
+	//srv.set('trust proxy', 1);
 
-	app.use(morgan(':remote-addr - [:date[iso]] ":method :url" :status - :response-time ms - :res[content-length]'));
-	app.use(bodyParser.json());
-	app.use(cors());
+	srv.use(morgan(':remote-addr - [:date[iso]] ":method :url" :status - :response-time ms - :res[content-length]'));
+	srv.use(bodyParser.json());
+	srv.use(cors());
 
-	app.use('/api', require('../routes')); // api endpoints
+	srv.use('/api', require('../routes')); // api endpoints
 
-	app.use(express.static('public')); // static resources
+	srv.use(express.static('public')); // static resources
 
 	const staticFileMiddleware = express.static('client'); // client resources
-	app.use(staticFileMiddleware);
-	app.use(history());
-	app.use(staticFileMiddleware);
+	srv.use(staticFileMiddleware);
+	srv.use(history());
+	srv.use(staticFileMiddleware);
 
 	const port = config.web.port;
 
 	http.listen(port, () => { 
-		console.log('Running at port ' + port);
+		console.log('web: Running at port ' + port);
 	});
 
 	return {
-		express: app,
+		express: srv,
 		http: http,
 	};
 };

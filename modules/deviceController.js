@@ -2,7 +2,7 @@
 
 const eventEmitter = require('events').EventEmitter;
 
-module.exports = async(config) => {
+module.exports = async(app, config) => {
 	console.log('creating device controller');
 	const devconfigs = config.get('devices'); // TODO get devices from other place such as a dedicated config file or db
 	
@@ -32,15 +32,16 @@ module.exports = async(config) => {
 	}
 
 	return Object.assign(controller, {
-		async initialize(app) {
+		async initializeDevices() {
 			console.log('creating devices');
-			for (let d of devconfigs) {
+			// wait for all devices to be created async
+			await Promise.all(devconfigs.map(async(d) => {
 				try {
 					await addDevice(app, d);
 				} catch (e) {
 					console.error(`Failed to load device (${d.id}): ${e}`);
 				}
-			}
+			}));
 		},
 		addDevice,
 		stateChange(devId, dev) {
@@ -48,5 +49,8 @@ module.exports = async(config) => {
 			controller.emit('stateChange', devId, dev, controller);
 		},
 		devices,
+		getDevice(id) {
+			return devices.find(d => d.id === id);
+		},
 	});
 };
