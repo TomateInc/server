@@ -51,6 +51,15 @@ let config = {
 			stateTopic: "home/living/sensor",
 		},
 	],
+
+	automation: function(app) {
+		const getDevice = app.modules.deviceController.getDevice;
+
+		// ex. toggle light when media starts to play
+		getDevice('kodi').on('play', () => {
+			getDevice('light').actions.toggle();
+		});
+	},
 };
 
 module.exports = config;
