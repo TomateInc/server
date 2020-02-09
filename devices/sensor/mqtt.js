@@ -56,11 +56,8 @@ module.exports = async(app, config) => {
 	mqtt.on('message', function(topic, message) {
 		// message is Buffer
 		if (topic === config.stateTopic) {
-			if (!config.valueProperty) {
-				state.value = message;
-			} else {
-				state.value = JSON.parse(message);
-
+			state.value = JSON.parse(message);
+			if (config.valueProperty) {
 				for (let a of config.accessor) {
 					state.value = state.value[a];
 				}
