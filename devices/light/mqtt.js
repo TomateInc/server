@@ -77,6 +77,7 @@ module.exports = async(app, config) => {
 			}
 
 			// notify device state change
+			device.emit('change', this, state);
 			ctrl.stateChange(config.id, device);
 		}
 	});

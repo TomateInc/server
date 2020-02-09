@@ -85,6 +85,7 @@ module.exports = async(app, config) => {
 	function handleSpeedChange(speed, event) {
 		device.emit(event, this);
 		state.speed = speed;
+		device.emit('change', this, state);
 		ctrl.stateChange(config.id, device);
 
 	}
@@ -103,6 +104,7 @@ module.exports = async(app, config) => {
 			case 'Player.OnSpeedChanged':
 			case 'Player.OnSeek':
 				state.speed = data.player.speed;
+				device.emit('change', this, state);
 				ctrl.stateChange(config.id, device);
 				break;
 
@@ -110,6 +112,7 @@ module.exports = async(app, config) => {
 				device.emit('stop', this);
 				state.currentPlayerId = undefined;
 				state.speed = 0;
+				device.emit('change', this, state);
 				ctrl.stateChange(config.id, device);
 				break;
 
@@ -124,6 +127,7 @@ module.exports = async(app, config) => {
 				state.connected = false;
 				state.currentPlayerId = undefined;
 				state.speed = 0;
+				device.emit('change', this, state);
 				ctrl.stateChange(config.id, device);
 				break;
 		}

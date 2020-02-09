@@ -1,5 +1,7 @@
 'use strict';
 
+const eventEmitter = require('events').EventEmitter;
+
 module.exports = async(app, config) => {
 	let mqtt = app.modules.mqtt;
 	let ctrl = app.modules.deviceController;
@@ -37,14 +39,16 @@ module.exports = async(app, config) => {
 		state.value = val;
 
 		// notify device state change
+		device.emit('change', this, state);
 		ctrl.stateChange(config.id, device);
 	}
 
-	let device = {
+	let device = Object.create(new eventEmitter());
+	device = Object.assign(device, {
 		config,
 		state,
 		actions: { set },
-	};
+	});
 
 	let timeout = undefined;
 
