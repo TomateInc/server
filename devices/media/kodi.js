@@ -57,7 +57,7 @@ module.exports = async(app, config) => {
 	});
 	ws.on('error', (err) => {
 		state.connected = false;
-		console.log(err);
+		console.log('kodi err: ' + err);
 	});
 
 	ws.on('ping', () => {
@@ -66,6 +66,13 @@ module.exports = async(app, config) => {
 
 	ws.on('message', (data) => {
 		console.log(data);
+		//errors can happen on  parse:
+		// 0 | tomate | log | ��
+		// 0 | tomate | err | undefined: 1
+		// 0 | tomate | err | ��
+		// 0 | tomate | err | ^
+		// 0 | tomate | err | SyntaxError: Unexpected token � in JSON at position 0
+
 		data = JSON.parse(data);
 
 		if (data.id === getActivePlayersId) {
@@ -136,7 +143,11 @@ module.exports = async(app, config) => {
 	device = Object.assign(device, {
 		config,
 		state,
-		actions: {},
+		actions: {
+			togglePlay() {
+				console.log('TODO kodi togglePlay');
+			},
+		},
 	});
 
 	return device;
